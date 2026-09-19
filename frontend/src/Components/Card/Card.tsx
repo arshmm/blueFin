@@ -1,12 +1,13 @@
+import { JSX } from "react";
 import "./Card.css";
+import { CompanySearch } from "../../company";
 
 interface Props {
-  companyName: string;
-  ticker: string;
-  price: number;
+  searchResult: CompanySearch;
+  id: string;
 }
 
-const Card = ({ companyName, ticker, price }: Props) => {
+const Card: React.FC<Props> = ({ id, searchResult }: Props): JSX.Element => {
   return (
     <div className="card">
       <img
@@ -15,13 +16,12 @@ const Card = ({ companyName, ticker, price }: Props) => {
       />
       <div className="details">
         <h2>
-          {companyName} ({ticker})
+          {searchResult.name} ({searchResult.symbol})
         </h2>
-        <p>${price.toFixed(2)}</p>
+        <p>{searchResult.currency}</p>
       </div>
       <p className="info">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magni,
-        officia!
+        {searchResult.exchangeFullName} - {searchResult.exchange}
       </p>
     </div>
   );
