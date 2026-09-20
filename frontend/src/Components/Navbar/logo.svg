@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="184" height="44" viewBox="0 0 184 44" role="img" aria-label="blueFin">
+  <defs>
+    <linearGradient id="finGradient" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="hsl(213.86, 58.82%, 46.67%)"/>
+      <stop offset="1" stop-color="hsl(215.02, 98.39%, 51.18%)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- dorsal fin -->
+  <path d="M8 33 C 16 29, 26 20, 33 6 C 35 18, 33 28, 28 33 Z"
+        fill="url(#finGradient)"/>
+
+  <!-- waterline rising to the right -->
+  <path d="M4 37 C 11 37, 15 36, 22 36 C 30 36, 33 32, 41 27"
+        fill="none"
+        stroke="hsl(156.62, 73.33%, 58.82%)"
+        stroke-width="2.6"
+        stroke-linecap="round"/>
+
+  <!-- wordmark -->
+  <text x="52" y="30"
+        font-family="Poppins, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="23"
+        letter-spacing="-0.4">
+    <tspan fill="hsl(213.86, 58.82%, 46.67%)" font-weight="400">blue</tspan><tspan fill="hsl(215.02, 98.39%, 51.18%)" font-weight="700">Fin</tspan>
+  </text>
+</svg>

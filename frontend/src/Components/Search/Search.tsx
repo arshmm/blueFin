@@ -1,22 +1,39 @@
-import { ChangeEvent, useState, SyntheticEvent } from "react";
+import React, { ChangeEvent, SyntheticEvent, JSX } from "react";
 
 interface Props {
-  handleChange: (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
-  onClick: (e: SyntheticEvent) => void;
+  onSearchSubmit: (e: SyntheticEvent) => void;
   search: string | undefined;
+  handleSearchChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Search = ({ handleChange, onClick, search }: Props) => {
+const Search: React.FC<Props> = ({
+  onSearchSubmit,
+  search,
+  handleSearchChange,
+}: Props): JSX.Element => {
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={search}
-        onChange={(e) => handleChange(e)}
-      />
-      <button onClick={(e) => onClick(e)}>Search</button>
-    </div>
+    <section className="relative bg-gray-100">
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <form
+          className="form relative flex flex-col w-full p-10 space-y-4 bg-darkBlue rounded-lg md:flex-row md:space-y-0 md:space-x-3"
+          onSubmit={onSearchSubmit}
+        >
+          <input
+            className="flex-1 p-3 border-2 rounded-lg placeholder-black focus:outline-none"
+            id="search-input"
+            placeholder="Search companies"
+            value={search}
+            onChange={handleSearchChange}
+          />
+          <button
+            type="submit"
+            className="px-8 py-3 font-bold text-white rounded-lg bg-lightGreen hover:opacity-70 focus:outline-none"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </section>
   );
 };
 
