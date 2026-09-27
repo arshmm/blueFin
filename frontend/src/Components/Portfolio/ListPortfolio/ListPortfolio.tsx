@@ -9,10 +9,10 @@ interface Props {
 const ListPortfolio = ({ portfolioValues, onPortfolioDelete }: Props) => {
   return (
     <section id="portfolio">
-      <h2 className="mb-3 mt-3 text-3xl font-semibold text-center md:text-4xl">
+      <h2 className="mb-4 mt-6 text-3xl font-bold tracking-tight text-center text-white md:text-4xl">
         My Portfolio
       </h2>
-      <div className="relative flex flex-col items-center max-w-5xl mx-auto space-y-10 px-10 mb-5 md:px-6 md:space-y-0 md:space-x-7 md:flex-row">
+      <div className="relative mx-auto mb-10 grid max-w-5xl grid-cols-1 gap-6 px-10 sm:grid-cols-2 md:grid-cols-3 md:px-6">
         <>
           {portfolioValues.length > 0 ? (
             portfolioValues.map((portfolioValue) => {
@@ -20,11 +20,12 @@ const ListPortfolio = ({ portfolioValues, onPortfolioDelete }: Props) => {
                 <CardPortfolio
                   portfolioValue={portfolioValue}
                   onPortfolioDelete={onPortfolioDelete}
+                  key={portfolioValue}
                 />
               );
             })
           ) : (
-            <h3 className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl">
+            <h3 className="col-span-full w-full rounded-xl border border-dashed border-slate-700 py-6 text-center text-base font-medium text-slate-500">
               Your portfolio is empty.
             </h3>
           )}

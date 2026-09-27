@@ -1,7 +1,6 @@
 import { SyntheticEvent } from "react";
 import { CompanySearch } from "../../company";
 import Card from "../Card/Card";
-import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   searchResults: CompanySearch[];
@@ -15,13 +14,13 @@ const CardList = ({ searchResults, onPortfolioCreate }: Props) => {
         searchResults.map((company) => (
           <Card
             id={company.symbol}
-            key={uuidv4()}
+            key={company.symbol}
             searchResult={company}
             onPortfolioCreate={onPortfolioCreate}
           />
         ))
       ) : (
-        <p className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl">
+        <p className="mb-3 mt-6 text-lg font-medium text-center text-slate-500">
           No results!
         </p>
       )}

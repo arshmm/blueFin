@@ -22,6 +22,6 @@
         font-family="Poppins, 'Segoe UI', Helvetica, Arial, sans-serif"
         font-size="23"
         letter-spacing="-0.4">
-    <tspan fill="hsl(213.86, 58.82%, 46.67%)" font-weight="400">blue</tspan><tspan fill="hsl(215.02, 98.39%, 51.18%)" font-weight="700">Fin</tspan>
+    <tspan fill="#f1f5f9" font-weight="400">blue</tspan><tspan fill="hsl(215.02, 98.39%, 62%)" font-weight="700">Fin</tspan>
   </text>
 </svg>
