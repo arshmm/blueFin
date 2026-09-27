@@ -31,9 +31,15 @@ const Navbar = (props: Props) => {
           <div className="cursor-pointer text-slate-300 transition-colors hover:text-white">
             Login
           </div>
-          <a className="rounded-lg bg-lightGreen px-5 py-2.5 font-semibold text-slate-950 shadow-lg shadow-lightGreen/20 transition hover:brightness-110">
+          {/* <a className="rounded-lg bg-lightGreen px-5 py-2.5 font-semibold text-slate-950 shadow-lg shadow-lightGreen/20 transition hover:brightness-110">
             Signup
-          </a>
+          </a> */}
+          <button
+            type="button"
+            className="rounded-lg bg-lightGreen px-5 py-2.5 font-semibold text-slate-950 shadow-lg shadow-lightGreen/20 transition hover:brightness-110"
+          >
+            Signup
+          </button>
         </div>
       </div>
     </nav>
