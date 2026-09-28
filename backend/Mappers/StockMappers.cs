@@ -19,7 +19,8 @@ namespace backend.Mappers
                 Purchase = stockModel.Purchase,
                 lastDividend = stockModel.lastDividend,
                 Industry = stockModel.Industry,
-                marketCap = stockModel.marketCap
+                marketCap = stockModel.marketCap,
+                Comments = stockModel.Comments.Select(c => c.ToCommentDto()).ToList()
             };
         }
 

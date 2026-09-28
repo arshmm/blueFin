@@ -19,14 +19,14 @@ namespace backend.Repository
         }
         public Task<List<Stock>> GetAllAsync()
         {
-            return _db.Stocks.ToListAsync();
+            return _db.Stocks.Include(c => c.Comments).ToListAsync();
 
 
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
         {
-            return await _db.Stocks.FindAsync(id);
+            return await _db.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<Stock> CreateAsync(Stock stock)
