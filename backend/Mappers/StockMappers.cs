@@ -31,7 +31,7 @@ namespace backend.Mappers
                 Symbol = stockDto.Symbol,
                 CompanyName = stockDto.CompanyName,
                 Purchase = stockDto.Purchase,
-                lastDividend = stockDto.lastDividend,
+                lastDividend = stockDto.lastDividend!.Value,
                 Industry = stockDto.Industry,
                 marketCap = stockDto.marketCap
             };

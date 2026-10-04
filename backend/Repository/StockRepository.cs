@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.Dtos.Stock;
+using backend.Helpers;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,36 @@ namespace backend.Repository
         {
             _db = context;
         }
-        public Task<List<Stock>> GetAllAsync()
+        public Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            return _db.Stocks.Include(c => c.Comments).ToListAsync();
+            var stocks = _db.Stocks.Include(s => s.Comments).AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
 
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+            }
+
+            if (string.Equals(query.SortBy, "CompanyName", StringComparison.OrdinalIgnoreCase))
+            {
+                stocks = query.IsDescending ? stocks.OrderByDescending(s => s.CompanyName).ThenBy(s => s.Id) : stocks.OrderBy(s => s.CompanyName).ThenBy(s => s.Id);
+            }
+            else if (string.Equals(query.SortBy, "Symbol", StringComparison.OrdinalIgnoreCase))
+            {
+                stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Symbol).ThenBy(s => s.Id) : stocks.OrderBy(s => s.Symbol).ThenBy(s => s.Id);
+            }
+            else
+            {
+                stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Id) : stocks.OrderBy(s => s.Id);
+            }
+
+            var skip = (query.PageNumber - 1) * query.PageSize;
+
+            return stocks.Skip(skip).Take(query.PageSize).ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsync(int id)
@@ -48,7 +74,7 @@ namespace backend.Repository
             stockModel.Symbol = stock.Symbol;
             stockModel.CompanyName = stock.CompanyName;
             stockModel.Purchase = stock.Purchase;
-            stockModel.lastDividend = stock.lastDividend;
+            stockModel.lastDividend = stock.lastDividend!.Value;
             stockModel.Industry = stock.Industry;
             stockModel.marketCap = stock.marketCap;
 
@@ -72,5 +98,9 @@ namespace backend.Repository
             return stockModel;
         }
 
+        public Task<bool> ExistsAsync(int id)
+        {
+            return _db.Stocks.AnyAsync(s => s.Id == id);
+        }
     }
 }
