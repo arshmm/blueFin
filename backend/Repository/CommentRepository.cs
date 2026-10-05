@@ -19,12 +19,12 @@ namespace backend.Repository
         }
         public Task<List<Comment>> GetAllAsync()
         {
-            return _db.Comments.ToListAsync();
+            return _db.Comments.Include(c => c.AppUser).ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(int id)
         {
-            return await _db.Comments.FindAsync(id);
+            return await _db.Comments.Include(c => c.AppUser).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Comment> CreateAsync(Comment comment)
