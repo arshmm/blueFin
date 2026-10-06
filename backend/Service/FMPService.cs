@@ -26,7 +26,11 @@ namespace backend.Service
                 {
                     var content = await result.Content.ReadAsStringAsync();
                     var task = JsonConvert.DeserializeObject<FMPStock[]>(content);
-                    var stock = task[0];
+                    var stock = task?.FirstOrDefault();
+                    if (stock == null)
+                    {
+                        return null;
+                    }
                     return stock.ToStockFromFMP();
                 }
                 return null;
