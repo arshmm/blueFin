@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Data;
+using backend.Helpers;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +14,17 @@ namespace backend.Repository
         {
             _db = context;
         }
-        public Task<List<Comment>> GetAllAsync()
+        public Task<List<Comment>> GetAllAsync(CommentQueryObject query)
         {
-            return _db.Comments.Include(c => c.AppUser).ToListAsync();
+            var comments = _db.Comments.Include(c => c.AppUser).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Symbol))
+            {
+                comments = comments.Where(c => c.Stock.Symbol == query.Symbol);
+            }
+
+            comments = query.IsDescending ? comments.OrderByDescending(c => c.CreatedOn).ThenBy(c => c.Id) : comments.OrderBy(c => c.CreatedOn).ThenBy(c => c.Id);
+            return comments.ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(int id)

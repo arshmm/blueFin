@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Dtos.Stock;
 using backend.Models;
 
@@ -34,6 +30,19 @@ namespace backend.Mappers
                 lastDividend = stockDto.lastDividend!.Value,
                 Industry = stockDto.Industry,
                 marketCap = stockDto.marketCap
+            };
+        }
+
+        public static Stock ToStockFromFMP(this FMPStock fmpStock)
+        {
+            return new Stock
+            {
+                Symbol = fmpStock.symbol,
+                CompanyName = fmpStock.companyName,
+                Purchase = (decimal)fmpStock.price,
+                lastDividend = (decimal)fmpStock.lastDividend,
+                Industry = fmpStock.industry,
+                marketCap = fmpStock.marketCap
             };
         }
     }

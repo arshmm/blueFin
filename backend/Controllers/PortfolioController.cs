@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Extensions;
 using backend.Interfaces;
 using backend.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,11 +15,14 @@ namespace backend.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IPortfolioRepository _portfolioRepo;
 
-        public PortfolioController(IStockRepository stockRepo, UserManager<AppUser> userManager, IPortfolioRepository portfolioRepository)
+        private readonly IFMPService _fmpService;
+
+        public PortfolioController(IStockRepository stockRepo, UserManager<AppUser> userManager, IPortfolioRepository portfolioRepository, IFMPService fmpService)
         {
             _stockRepo = stockRepo;
             _userManager = userManager;
             _portfolioRepo = portfolioRepository;
+            _fmpService = fmpService;
         }
 
         [HttpGet]
@@ -57,7 +55,15 @@ namespace backend.Controllers
             var stock = await _stockRepo.GetBySymbolAsync(symbol.ToUpper());
             if (stock == null)
             {
-                return NotFound("Stock not found.");
+                stock = await _fmpService.FindStockBySymbolAsync(symbol.ToUpper());
+                if (stock == null)
+                {
+                    return NotFound("Stock not found.");
+                }
+                else
+                {
+                    await _stockRepo.CreateAsync(stock);
+                }
             }
 
             var userPortfolio = await _portfolioRepo.GetUserPortfolioAsync(user);
