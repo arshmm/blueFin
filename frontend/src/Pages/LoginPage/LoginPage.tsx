@@ -84,12 +84,12 @@ const LoginPage = (props: Props) => {
                 )}
               </div>
               <div className="flex items-center justify-between">
-                <a
+                {/* <a
                   href="#"
                   className="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Forgot password?
-                </a>
+                </a> */}
               </div>
               <button
                 type="submit"
