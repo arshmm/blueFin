@@ -1,9 +1,16 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { searchCompanies } from "../../Util/api";
 import { CompanySearch } from "../../company";
 import CardList from "../../Components/CardList/CardList";
 import ListPortfolio from "../../Components/Portfolio/ListPortfolio/ListPortfolio";
 import Search from "../../Components/Search/Search";
+import { PortfolioGet } from "../../Models/Portfolio";
+import {
+  portfolioAddAPI,
+  portfolioDeleteAPI,
+  portfolioGetAPI,
+} from "../../Services/PortfolioService";
+import { toast } from "react-toastify";
 
 interface Props {}
 
@@ -12,7 +19,25 @@ const SearchPage = (props: Props) => {
   const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const [portfolioValues, setPortfolioValues] = useState<string[]>([]);
+  const [portfolioValues, setPortfolioValues] = useState<PortfolioGet[] | null>(
+    [],
+  );
+
+  useEffect(() => {
+    getPortfolio();
+  }, []);
+
+  const getPortfolio = () => {
+    portfolioGetAPI()
+      .then((res) => {
+        if (res?.data) {
+          setPortfolioValues(res?.data);
+        }
+      })
+      .catch((e) => {
+        setPortfolioValues(null);
+      });
+  };
 
   const handleSearchChange = (
     e: ChangeEvent<HTMLInputElement, HTMLInputElement>,
@@ -37,21 +62,30 @@ const SearchPage = (props: Props) => {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const symbol = formData.get("symbol");
-    if (portfolioValues.includes(symbol as string)) {
-      return;
-    }
-    setPortfolioValues([...portfolioValues, symbol as string]);
-    console.log(`Adding ${symbol} to portfolio`);
+    const symbol = formData.get("symbol") as string;
+    portfolioAddAPI(symbol)
+      .then((res) => {
+        if (res?.status === 201) {
+          toast.success("Stock added to portfolio!");
+          getPortfolio();
+        }
+      })
+      .catch((e) => {
+        toast.warning("Could not add stock to portfolio!");
+      });
   };
 
   const onPortfolioDelete = (e: SyntheticEvent) => {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const symbol = formData.get("symbol");
-    setPortfolioValues(portfolioValues.filter((value) => value !== symbol));
-    console.log(`Deleting ${symbol} from portfolio`);
+    const symbol = formData.get("symbol") as string;
+    portfolioDeleteAPI(symbol).then((res) => {
+      if (res?.status === 204) {
+        toast.success("Stock deleted from portfolio!");
+        getPortfolio();
+      }
+    });
   };
   return (
     <div className="App pb-16">
@@ -66,7 +100,7 @@ const SearchPage = (props: Props) => {
         </h1>
       )}
       <ListPortfolio
-        portfolioValues={portfolioValues}
+        portfolioValues={portfolioValues!}
         onPortfolioDelete={onPortfolioDelete}
       />
       <div className="mx-auto max-w-5xl space-y-3 px-6">
