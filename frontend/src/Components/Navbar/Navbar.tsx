@@ -22,6 +22,12 @@ const Navbar = (props: Props) => {
               Search
             </Link>
             <Link
+              to="/portfolio"
+              className="text-slate-300 transition-colors hover:text-white"
+            >
+              Portfolio
+            </Link>
+            <Link
               to="/design"
               className="text-slate-300 transition-colors hover:text-white"
             >

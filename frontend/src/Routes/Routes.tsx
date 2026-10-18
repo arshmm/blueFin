@@ -12,6 +12,7 @@ import LoginPage from "../Pages/LoginPage/LoginPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
 import StockComment from "../Components/StockComment/StockComment";
+import PortfolioPage from "../Pages/PortfolioPage/PortfolioPage";
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +27,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <SearchPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "portfolio",
+        element: (
+          <ProtectedRoute>
+            <PortfolioPage />
           </ProtectedRoute>
         ),
       },
