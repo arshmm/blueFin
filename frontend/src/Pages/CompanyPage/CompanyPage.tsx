@@ -16,6 +16,15 @@ const CompanyPage = (props: Props) => {
   const [company, setCompany] = useState<CompanyProfile>();
   const [error, setError] = useState<string | null>(null);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const amountOfWords = 50; // Number of words to show when collapsed
+
+  const splittedText = company?.description?.split(" ") || [];
+  const itCanOverflow = splittedText.length > amountOfWords;
+  const beginText = itCanOverflow
+    ? splittedText.slice(0, amountOfWords - 1).join(" ")
+    : company?.description;
+
   useEffect(() => {
     setCompany(undefined);
     setError(null);
@@ -59,9 +68,23 @@ const CompanyPage = (props: Props) => {
               subTitle={formatLargeMonetaryNumber(company.marketCap)}
             />
             <CompFinder ticker={company.symbol} />
-            <p className="mx-4 mt-2 basis-full rounded-xl border border-slate-800 border-l-4 border-l-lightBlue/70 bg-slate-900/60 px-6 py-5 text-[15px] leading-7 text-slate-300 shadow-lg shadow-black/20">
-              {company.description}
-            </p>
+            {company.description && (
+              <p className="mx-4 mt-2 basis-full rounded-xl border border-slate-800 border-l-4 border-l-lightBlue/70 bg-slate-900/60 px-6 py-5 text-[15px] leading-7 text-slate-300 shadow-lg shadow-black/20">
+                {isExpanded
+                  ? company.description
+                  : itCanOverflow
+                    ? `${beginText}...`
+                    : company.description}
+                {itCanOverflow && (
+                  <button
+                    className="ml-2 text-lightBlue hover:text-lightBlue/80"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                  >
+                    {isExpanded ? "Show Less" : "Show More"}
+                  </button>
+                )}
+              </p>
+            )}
           </CompanyDashboard>
         </div>
       ) : (

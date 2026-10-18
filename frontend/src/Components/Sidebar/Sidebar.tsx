@@ -4,6 +4,7 @@ import {
   FaBalanceScale,
   FaBuilding,
   FaChartLine,
+  FaComment,
   FaMoneyBillWave,
 } from "react-icons/fa";
 
@@ -39,6 +40,10 @@ const Sidebar = (props: Props) => {
         <NavLink to="cash-flow" className={linkClass}>
           <FaMoneyBillWave />
           <span>Cash Flow</span>
+        </NavLink>
+        <NavLink to="discussion" className={linkClass}>
+          <FaComment />
+          <span>Discussion</span>
         </NavLink>
       </div>
     </nav>

@@ -11,6 +11,7 @@ import CashflowStatement from "../Components/CashflowStatement/CashflowStatement
 import LoginPage from "../Pages/LoginPage/LoginPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
+import StockComment from "../Components/StockComment/StockComment";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
           { path: "income-statement", element: <IncomeStatement /> },
           { path: "balance-sheet", element: <BalanceSheet /> },
           { path: "cash-flow", element: <CashflowStatement /> },
+          { path: "discussion", element: <StockComment /> },
         ],
       },
     ],
