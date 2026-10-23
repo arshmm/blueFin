@@ -4,7 +4,7 @@ namespace backend.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser user);
+        string CreateToken(AppUser user, IList<string> roles);
 
         bool ValidateToken(string token);
     }

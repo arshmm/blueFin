@@ -95,6 +95,18 @@ namespace backend.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var existingComment = await _commentRepo.GetByIdAsync(id);
+
+            if (existingComment == null)
+            {
+                return NotFound("Comment not found");
+            }
+
+            if (!await CanModifyAsync(existingComment))
+            {
+                return Forbid();
+            }
+
             var comment = await _commentRepo.UpdateAsync(id, updateDto.ToCommentFromUpdate(id));
 
             if (comment == null)
@@ -106,8 +118,21 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            var existingComment = await _commentRepo.GetByIdAsync(id);
+
+            if (existingComment == null)
+            {
+                return NotFound("Comment does not exist.");
+            }
+
+            if (!await CanModifyAsync(existingComment))
+            {
+                return Forbid();
+            }
+
             var commentModel = await _commentRepo.DeleteAsync(id);
 
             if (commentModel == null)
@@ -116,6 +141,17 @@ namespace backend.Controllers
             }
 
             return Ok(commentModel.ToCommentDto());
+        }
+
+        private async Task<bool> CanModifyAsync(Comment comment)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return true;
+            }
+
+            var user = await _userManager.FindByNameAsync(User.GetUsername());
+            return user != null && comment.AppUserId == user.Id;
         }
     }
 }

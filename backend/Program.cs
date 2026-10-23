@@ -94,6 +94,19 @@ builder.Services.AddHttpClient<IFMPService, FMPService>();
 builder.Services.AddControllers();
 var app = builder.Build();
 
+// Promote the user named in Admin:Username (env var Admin__Username) to the Admin role
+var adminUsername = app.Configuration["Admin:Username"];
+if (!string.IsNullOrWhiteSpace(adminUsername))
+{
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    var adminUser = await userManager.FindByNameAsync(adminUsername);
+    if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Admin"))
+    {
+        await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

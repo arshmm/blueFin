@@ -1,6 +1,7 @@
 using backend.Extensions;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //   [Authorize]
+    [Authorize]
     public class PortfolioController : ControllerBase
     {
         private readonly IStockRepository _stockRepo;

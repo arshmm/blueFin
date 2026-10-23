@@ -46,7 +46,8 @@ namespace backend.Controllers
                 return BadRequest(roleResult.Errors);
             }
 
-            var token = _tokenService.CreateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _tokenService.CreateToken(user, roles);
 
             return Ok(new NewUserDto
             {
@@ -74,7 +75,8 @@ namespace backend.Controllers
                 return Unauthorized("Invalid username or password.");
             }
 
-            var token = _tokenService.CreateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _tokenService.CreateToken(user, roles);
 
             return Ok(new NewUserDto
             {
