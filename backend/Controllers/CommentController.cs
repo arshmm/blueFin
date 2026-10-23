@@ -29,7 +29,6 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] CommentQueryObject query)
         {
             var comment = await _commentRepo.GetAllAsync(query);
