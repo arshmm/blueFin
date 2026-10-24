@@ -1,21 +1,34 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { PortfolioGet } from "../../Models/Portfolio";
+import { FaPen } from "react-icons/fa";
+import { PortfolioGet, PortfolioPut } from "../../Models/Portfolio";
 import {
   portfolioDeleteAPI,
   portfolioGetAPI,
+  portfolioUpdateAPI,
 } from "../../Services/PortfolioService";
 import Table from "../../Components/Table/Table";
 import Spinner from "../../Components/Spinners/Spinner";
 import DeletePortfolio from "../../Components/Portfolio/DeletePortfolio/DeletePortfolio";
-import { formatLargeMonetaryNumber } from "../../Util/numberFormatting";
+import EditPortfolio from "../../Components/Portfolio/EditPortfolio/EditPortfolio";
+import AllocationChart from "../../Components/Portfolio/AllocationChart/AllocationChart";
+import PortfolioSummary, {
+  changeArrow,
+  changeClass,
+} from "../../Components/Portfolio/PortfolioSummary/PortfolioSummary";
+import {
+  formatCurrency,
+  formatSignedCurrency,
+  formatSignedPercent,
+} from "../../Util/numberFormatting";
 
 interface Props {}
 
 const PortfolioPage = (props: Props) => {
   const [portfolio, setPortfolio] = useState<PortfolioGet[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [editing, setEditing] = useState<PortfolioGet | null>(null);
 
   useEffect(() => {
     getPortfolio();
@@ -47,47 +60,102 @@ const PortfolioPage = (props: Props) => {
     });
   };
 
+  const onPortfolioUpdate = (symbol: string, update: PortfolioPut) => {
+    portfolioUpdateAPI(symbol, update).then((res) => {
+      if (res?.status === 200) {
+        toast.success(`${symbol} updated!`);
+        setEditing(null);
+        getPortfolio();
+      }
+    });
+  };
+
+  const closeEdit = useCallback(() => setEditing(null), []);
+
   const config = [
     {
-      label: "Symbol",
+      label: "Holding",
       render: (stock: PortfolioGet) => (
-        <Link
-          to={`/company/${stock.symbol}/company-profile`}
-          className="font-semibold text-lightBlue hover:text-lightBlue/80"
-        >
-          {stock.symbol}
-        </Link>
+        <div>
+          <Link
+            to={`/company/${stock.symbol}/company-profile`}
+            className="font-semibold text-lightBlue hover:text-lightBlue/80"
+          >
+            {stock.symbol}
+          </Link>
+          <div
+            className="max-w-[12rem] truncate text-xs text-slate-500"
+            title={stock.companyName}
+          >
+            {stock.companyName}
+          </div>
+        </div>
       ),
     },
     {
-      label: "Company",
-      render: (stock: PortfolioGet) => stock.companyName,
+      label: "Shares",
+      render: (stock: PortfolioGet) =>
+        stock.shares > 0 ? (
+          stock.shares.toLocaleString("en-US", { maximumFractionDigits: 4 })
+        ) : (
+          <button
+            onClick={() => setEditing(stock)}
+            className="text-xs font-semibold text-amber-300 hover:text-amber-200"
+          >
+            Set shares
+          </button>
+        ),
     },
     {
-      label: "Industry",
-      render: (stock: PortfolioGet) => stock.industry,
+      label: "Avg cost",
+      render: (stock: PortfolioGet) => formatCurrency(stock.avgCost),
     },
     {
       label: "Price",
-      render: (stock: PortfolioGet) => "$" + stock.purchase.toFixed(2),
+      render: (stock: PortfolioGet) => (
+        <div>
+          <div>{formatCurrency(stock.price)}</div>
+          <div className={`text-xs ${changeClass(stock.changePercentage)}`}>
+            {changeArrow(stock.changePercentage)}
+            {formatSignedPercent(stock.changePercentage)}
+          </div>
+        </div>
+      ),
     },
     {
-      label: "Dividend",
-      render: (stock: PortfolioGet) => stock.lastDividend,
+      label: "Market value",
+      render: (stock: PortfolioGet) => formatCurrency(stock.marketValue),
     },
     {
-      label: "Market Cap",
-      render: (stock: PortfolioGet) =>
-        formatLargeMonetaryNumber(stock.marketCap),
+      label: "Gain / loss",
+      render: (stock: PortfolioGet) => (
+        <div className={changeClass(stock.gainLoss)}>
+          <div>{formatSignedCurrency(stock.gainLoss)}</div>
+          <div className="text-xs">
+            {changeArrow(stock.gainLoss)}
+            {formatSignedPercent(stock.gainLossPercentage)}
+          </div>
+        </div>
+      ),
     },
     {
       label: "",
       render: (stock: PortfolioGet) => (
-        <div className="w-12">
-          <DeletePortfolio
-            portfolioValue={stock.symbol}
-            onPortfolioDelete={onPortfolioDelete}
-          />
+        <div className="flex w-24 gap-2">
+          <button
+            onClick={() => setEditing(stock)}
+            aria-label={`Edit ${stock.symbol}`}
+            title={`Edit ${stock.symbol}`}
+            className="flex flex-1 items-center justify-center rounded-lg border border-slate-600 bg-slate-800 py-2.5 text-slate-300 transition duration-200 hover:bg-slate-700 hover:text-white"
+          >
+            <FaPen />
+          </button>
+          <div className="flex-1">
+            <DeletePortfolio
+              portfolioValue={stock.symbol}
+              onPortfolioDelete={onPortfolioDelete}
+            />
+          </div>
         </div>
       ),
     },
@@ -108,7 +176,11 @@ const PortfolioPage = (props: Props) => {
       {loading ? (
         <Spinner />
       ) : portfolio && portfolio.length > 0 ? (
-        <Table config={config} data={portfolio} />
+        <>
+          <PortfolioSummary holdings={portfolio} />
+          <AllocationChart holdings={portfolio} />
+          <Table config={config} data={portfolio} />
+        </>
       ) : (
         <div className="rounded-xl border border-dashed border-slate-700 py-8 text-center">
           <h3 className="text-base font-medium text-slate-500">
@@ -121,6 +193,13 @@ const PortfolioPage = (props: Props) => {
             Search for stocks to add
           </Link>
         </div>
+      )}
+      {editing && (
+        <EditPortfolio
+          holding={editing}
+          onSave={onPortfolioUpdate}
+          onClose={closeEdit}
+        />
       )}
     </section>
   );

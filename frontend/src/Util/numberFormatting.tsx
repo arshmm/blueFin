@@ -32,6 +32,28 @@ export const formatLargeNonMonetaryNumber = (number: number): string => {
   return compact(number) ?? String(Math.round(number * 100) / 100);
 };
 
+export const formatCurrency = (number: number | null): string => {
+  if (number === null || !Number.isFinite(number)) {
+    return "N/A";
+  }
+  return number.toLocaleString("en-US", { style: "currency", currency: "USD" });
+};
+
+// Like formatCurrency but always shows the sign, e.g. +$12.40 / -$3.10
+export const formatSignedCurrency = (number: number | null): string => {
+  if (number === null || !Number.isFinite(number)) {
+    return "N/A";
+  }
+  return (number > 0 ? "+" : number < 0 ? "-" : "") + formatCurrency(Math.abs(number));
+};
+
+export const formatSignedPercent = (number: number | null): string => {
+  if (number === null || !Number.isFinite(number)) {
+    return "N/A";
+  }
+  return (number > 0 ? "+" : "") + number.toFixed(2) + "%";
+};
+
 export const formatRatio = (ratio: number): string => {
   if (!Number.isFinite(ratio)) {
     return "N/A";

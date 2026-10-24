@@ -84,29 +84,29 @@ namespace backend.Data
                 .HasForeignKey(p => p.StockId);
 
             builder.Entity<Portfolio>().HasData(
-                new Portfolio { AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1", StockId = 1 }, // investor111
-                new Portfolio { AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1", StockId = 2 }, // investor111
-                new Portfolio { AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1", StockId = 3 }, // investor111
-                new Portfolio { AppUserId = "9b3f00f0-fe42-5221-8fce-8171332a4851", StockId = 4 }, // investor222
-                new Portfolio { AppUserId = "9b3f00f0-fe42-5221-8fce-8171332a4851", StockId = 5 }, // investor222
-                new Portfolio { AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564", StockId = 6 }, // investor333
-                new Portfolio { AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564", StockId = 7 }, // investor333
-                new Portfolio { AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564", StockId = 8 }, // investor333
-                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 1 }, // investor444
-                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 3 }, // investor444
-                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 4 }, // investor444
-                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 5 }, // investor444
-                new Portfolio { AppUserId = "8eb8512f-7564-56e0-80e1-35e8256e1973", StockId = 7 }, // investor555
-                new Portfolio { AppUserId = "24912af2-fe71-5b9c-ae70-54ce47a06df4", StockId = 2 }, // investor666
-                new Portfolio { AppUserId = "24912af2-fe71-5b9c-ae70-54ce47a06df4", StockId = 6 }, // investor666
-                new Portfolio { AppUserId = "c129d2e4-7e79-5811-a736-66117ca1c8ff", StockId = 3 }, // investor777
-                new Portfolio { AppUserId = "c129d2e4-7e79-5811-a736-66117ca1c8ff", StockId = 4 }, // investor777
-                new Portfolio { AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a", StockId = 1 }, // investor888
-                new Portfolio { AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a", StockId = 5 }, // investor888
-                new Portfolio { AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a", StockId = 8 }, // investor888
-                new Portfolio { AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f", StockId = 2 }, // investor999
-                new Portfolio { AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f", StockId = 7 }, // investor999
-                new Portfolio { AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f", StockId = 8 } // investor999
+                new Portfolio { AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1", StockId = 1, Shares = 15, AvgCost = 227.50m }, // investor111
+                new Portfolio { AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1", StockId = 2, Shares = 8, AvgCost = 428.10m }, // investor111
+                new Portfolio { AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1", StockId = 3, Shares = 40, AvgCost = 135.40m }, // investor111
+                new Portfolio { AppUserId = "9b3f00f0-fe42-5221-8fce-8171332a4851", StockId = 4, Shares = 12, AvgCost = 248.90m }, // investor222
+                new Portfolio { AppUserId = "9b3f00f0-fe42-5221-8fce-8171332a4851", StockId = 5, Shares = 20, AvgCost = 196.20m }, // investor222
+                new Portfolio { AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564", StockId = 6, Shares = 10, AvgCost = 238.60m }, // investor333
+                new Portfolio { AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564", StockId = 7, Shares = 50, AvgCost = 62.80m }, // investor333
+                new Portfolio { AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564", StockId = 8, Shares = 4, AvgCost = 905.30m }, // investor333
+                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 1, Shares = 15, AvgCost = 227.50m }, // investor444
+                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 3, Shares = 40, AvgCost = 135.40m }, // investor444
+                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 4, Shares = 12, AvgCost = 248.90m }, // investor444
+                new Portfolio { AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488", StockId = 5, Shares = 20, AvgCost = 196.20m }, // investor444
+                new Portfolio { AppUserId = "8eb8512f-7564-56e0-80e1-35e8256e1973", StockId = 7, Shares = 50, AvgCost = 62.80m }, // investor555
+                new Portfolio { AppUserId = "24912af2-fe71-5b9c-ae70-54ce47a06df4", StockId = 2, Shares = 8, AvgCost = 428.10m }, // investor666
+                new Portfolio { AppUserId = "24912af2-fe71-5b9c-ae70-54ce47a06df4", StockId = 6, Shares = 10, AvgCost = 238.60m }, // investor666
+                new Portfolio { AppUserId = "c129d2e4-7e79-5811-a736-66117ca1c8ff", StockId = 3, Shares = 40, AvgCost = 135.40m }, // investor777
+                new Portfolio { AppUserId = "c129d2e4-7e79-5811-a736-66117ca1c8ff", StockId = 4, Shares = 12, AvgCost = 248.90m }, // investor777
+                new Portfolio { AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a", StockId = 1, Shares = 15, AvgCost = 227.50m }, // investor888
+                new Portfolio { AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a", StockId = 5, Shares = 20, AvgCost = 196.20m }, // investor888
+                new Portfolio { AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a", StockId = 8, Shares = 4, AvgCost = 905.30m }, // investor888
+                new Portfolio { AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f", StockId = 2, Shares = 8, AvgCost = 428.10m }, // investor999
+                new Portfolio { AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f", StockId = 7, Shares = 50, AvgCost = 62.80m }, // investor999
+                new Portfolio { AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f", StockId = 8, Shares = 4, AvgCost = 905.30m } // investor999
             );
         }
     }

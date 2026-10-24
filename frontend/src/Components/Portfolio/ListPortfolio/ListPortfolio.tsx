@@ -21,7 +21,7 @@ const ListPortfolio = ({ portfolioValues, onPortfolioDelete }: Props) => {
                 <CardPortfolio
                   portfolioValue={portfolioValue}
                   onPortfolioDelete={onPortfolioDelete}
-                  key={portfolioValue.id}
+                  key={portfolioValue.symbol}
                 />
               );
             })

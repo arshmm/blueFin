@@ -35,12 +35,20 @@ const SearchPage = (props: Props) => {
   const onPortfolioCreate = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target as HTMLFormElement);
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
     const symbol = formData.get("symbol") as string;
-    portfolioAddAPI(symbol)
+    const shares = Number(formData.get("shares"));
+    const avgCost = formData.get("avgCost") as string;
+    portfolioAddAPI({
+      symbol,
+      shares,
+      avgCost: avgCost ? Number(avgCost) : undefined,
+    })
       .then((res) => {
         if (res?.status === 201) {
-          toast.success(`${symbol} added to portfolio!`);
+          toast.success(`${shares} ${symbol} added to portfolio!`);
+          form.reset();
         }
       })
       .catch((e) => {

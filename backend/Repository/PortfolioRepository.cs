@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Dtos.Portfolio;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -32,19 +33,30 @@ namespace backend.Repository
             return portfolio;
         }
 
-        public async Task<List<Stock>> GetUserPortfolioAsync(AppUser user)
+        public async Task<List<Portfolio>> GetUserPortfolioAsync(AppUser user)
         {
-            return await _context.Portfolios.Where(s => s.AppUserId == user.Id).Select(s => new Stock
-            {
-                Id = s.StockId,
-                Symbol = s.Stock.Symbol,
-                CompanyName = s.Stock.CompanyName,
-                Purchase = s.Stock.Purchase,
-                lastDividend = s.Stock.lastDividend,
-                Industry = s.Stock.Industry,
-                marketCap = s.Stock.marketCap,
-            }).ToListAsync();
+            return await _context.Portfolios.Include(p => p.Stock).Where(p => p.AppUserId == user.Id).ToListAsync();
+        }
 
+        public async Task<Portfolio?> GetUserHoldingAsync(AppUser user, string symbol)
+        {
+            return await _context.Portfolios.Include(p => p.Stock).FirstOrDefaultAsync(p => p.AppUserId == user.Id && p.Stock.Symbol.ToUpper() == symbol.ToUpper());
+        }
+
+        public async Task<Portfolio?> UpdateAsync(AppUser user, string symbol, UpdatePortfolioRequestDto updateDto)
+        {
+            var portfolio = await GetUserHoldingAsync(user, symbol);
+            if (portfolio == null)
+            {
+                return null;
+            }
+
+            portfolio.Shares = updateDto.Shares;
+            portfolio.AvgCost = updateDto.AvgCost;
+            portfolio.PurchasedOn = updateDto.PurchasedOn;
+
+            await _context.SaveChangesAsync();
+            return portfolio;
         }
     }
 }

@@ -562,6 +562,15 @@ namespace backend.Migrations
                     b.Property<int>("StockId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("AvgCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PurchasedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Shares")
+                        .HasColumnType("decimal(18,4)");
+
                     b.HasKey("AppUserId", "StockId");
 
                     b.HasIndex("StockId");
@@ -572,117 +581,163 @@ namespace backend.Migrations
                         new
                         {
                             AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1",
-                            StockId = 1
+                            StockId = 1,
+                            AvgCost = 227.50m,
+                            Shares = 15m
                         },
                         new
                         {
                             AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1",
-                            StockId = 2
+                            StockId = 2,
+                            AvgCost = 428.10m,
+                            Shares = 8m
                         },
                         new
                         {
                             AppUserId = "744f4311-22b4-5a24-b0f1-3e985835dda1",
-                            StockId = 3
+                            StockId = 3,
+                            AvgCost = 135.40m,
+                            Shares = 40m
                         },
                         new
                         {
                             AppUserId = "9b3f00f0-fe42-5221-8fce-8171332a4851",
-                            StockId = 4
+                            StockId = 4,
+                            AvgCost = 248.90m,
+                            Shares = 12m
                         },
                         new
                         {
                             AppUserId = "9b3f00f0-fe42-5221-8fce-8171332a4851",
-                            StockId = 5
+                            StockId = 5,
+                            AvgCost = 196.20m,
+                            Shares = 20m
                         },
                         new
                         {
                             AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564",
-                            StockId = 6
+                            StockId = 6,
+                            AvgCost = 238.60m,
+                            Shares = 10m
                         },
                         new
                         {
                             AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564",
-                            StockId = 7
+                            StockId = 7,
+                            AvgCost = 62.80m,
+                            Shares = 50m
                         },
                         new
                         {
                             AppUserId = "4d0f22a1-fdfa-5d2e-9856-7957c3fd5564",
-                            StockId = 8
+                            StockId = 8,
+                            AvgCost = 905.30m,
+                            Shares = 4m
                         },
                         new
                         {
                             AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488",
-                            StockId = 1
+                            StockId = 1,
+                            AvgCost = 227.50m,
+                            Shares = 15m
                         },
                         new
                         {
                             AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488",
-                            StockId = 3
+                            StockId = 3,
+                            AvgCost = 135.40m,
+                            Shares = 40m
                         },
                         new
                         {
                             AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488",
-                            StockId = 4
+                            StockId = 4,
+                            AvgCost = 248.90m,
+                            Shares = 12m
                         },
                         new
                         {
                             AppUserId = "40fa6713-d2fa-52ac-b193-de5554240488",
-                            StockId = 5
+                            StockId = 5,
+                            AvgCost = 196.20m,
+                            Shares = 20m
                         },
                         new
                         {
                             AppUserId = "8eb8512f-7564-56e0-80e1-35e8256e1973",
-                            StockId = 7
+                            StockId = 7,
+                            AvgCost = 62.80m,
+                            Shares = 50m
                         },
                         new
                         {
                             AppUserId = "24912af2-fe71-5b9c-ae70-54ce47a06df4",
-                            StockId = 2
+                            StockId = 2,
+                            AvgCost = 428.10m,
+                            Shares = 8m
                         },
                         new
                         {
                             AppUserId = "24912af2-fe71-5b9c-ae70-54ce47a06df4",
-                            StockId = 6
+                            StockId = 6,
+                            AvgCost = 238.60m,
+                            Shares = 10m
                         },
                         new
                         {
                             AppUserId = "c129d2e4-7e79-5811-a736-66117ca1c8ff",
-                            StockId = 3
+                            StockId = 3,
+                            AvgCost = 135.40m,
+                            Shares = 40m
                         },
                         new
                         {
                             AppUserId = "c129d2e4-7e79-5811-a736-66117ca1c8ff",
-                            StockId = 4
+                            StockId = 4,
+                            AvgCost = 248.90m,
+                            Shares = 12m
                         },
                         new
                         {
                             AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a",
-                            StockId = 1
+                            StockId = 1,
+                            AvgCost = 227.50m,
+                            Shares = 15m
                         },
                         new
                         {
                             AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a",
-                            StockId = 5
+                            StockId = 5,
+                            AvgCost = 196.20m,
+                            Shares = 20m
                         },
                         new
                         {
                             AppUserId = "73aaeeb2-7674-5108-a974-9312dcfd454a",
-                            StockId = 8
+                            StockId = 8,
+                            AvgCost = 905.30m,
+                            Shares = 4m
                         },
                         new
                         {
                             AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f",
-                            StockId = 2
+                            StockId = 2,
+                            AvgCost = 428.10m,
+                            Shares = 8m
                         },
                         new
                         {
                             AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f",
-                            StockId = 7
+                            StockId = 7,
+                            AvgCost = 62.80m,
+                            Shares = 50m
                         },
                         new
                         {
                             AppUserId = "b5683003-fdf4-59cb-b121-048d94b77a9f",
-                            StockId = 8
+                            StockId = 8,
+                            AvgCost = 905.30m,
+                            Shares = 4m
                         });
                 });
 

@@ -1,5 +1,7 @@
+using backend.Dtos.Portfolio;
 using backend.Extensions;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -37,14 +39,21 @@ namespace backend.Controllers
             }
 
             var portfolio = await _portfolioRepo.GetUserPortfolioAsync(user);
-            return Ok(portfolio);
+            var quotes = await Task.WhenAll(portfolio.Select(p => _fmpService.GetQuoteAsync(p.Stock.Symbol)));
+            var holdings = portfolio.Select((p, i) => p.ToHoldingDto(quotes[i])).ToList();
+
+            return Ok(holdings);
 
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPortfolio(string symbol)
+        public async Task<IActionResult> AddPortfolio([FromBody] CreatePortfolioRequestDto createDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var symbol = createDto.Symbol;
             var username = User.GetUsername();
             var user = await _userManager.FindByNameAsync(username);
 
@@ -67,26 +76,59 @@ namespace backend.Controllers
                 }
             }
 
-            var userPortfolio = await _portfolioRepo.GetUserPortfolioAsync(user);
+            var existingHolding = await _portfolioRepo.GetUserHoldingAsync(user, stock.Symbol);
 
-            if (userPortfolio.Any(p => p.Symbol.ToUpper() == stock.Symbol.ToUpper()))
+            if (existingHolding != null)
             {
-                return BadRequest("Stock already in portfolio.");
+                return BadRequest("Stock already in portfolio. Edit the holding to change shares.");
+            }
+
+            var quote = await _fmpService.GetQuoteAsync(stock.Symbol);
+            var avgCost = createDto.AvgCost ?? quote?.price;
+
+            if (avgCost == null)
+            {
+                return BadRequest("No live price available. Enter your average cost.");
             }
 
             var portfolio = new Portfolio
             {
                 AppUserId = user.Id,
-                StockId = stock.Id
+                StockId = stock.Id,
+                Shares = createDto.Shares,
+                AvgCost = Math.Round(avgCost.Value, 2),
+                PurchasedOn = createDto.PurchasedOn,
+                Stock = stock
             };
 
             await _portfolioRepo.CreateAsync(portfolio);
+            return Created($"api/portfolio/{stock.Symbol}", portfolio.ToHoldingDto(quote));
+
+        }
+
+        [HttpPut("{symbol}")]
+        public async Task<IActionResult> UpdatePortfolio([FromRoute] string symbol, [FromBody] UpdatePortfolioRequestDto updateDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var username = User.GetUsername();
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var portfolio = await _portfolioRepo.UpdateAsync(user, symbol, updateDto);
+
             if (portfolio == null)
             {
-                return BadRequest("Failed to add stock to portfolio.");
+                return NotFound("Stock not found in portfolio.");
             }
-            return Created();
 
+            var quote = await _fmpService.GetQuoteAsync(portfolio.Stock.Symbol);
+            return Ok(portfolio.ToHoldingDto(quote));
         }
 
         [HttpDelete]
