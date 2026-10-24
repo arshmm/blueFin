@@ -40,7 +40,7 @@ const Navbar = (props: Props) => {
             <div className="text-slate-300">Welcome, {user?.userName}</div>
             <button
               type="button"
-              onClick={logout}
+              onClick={() => logout()}
               className="rounded-lg bg-lightGreen px-5 py-2.5 font-semibold text-slate-950 shadow-lg shadow-lightGreen/20 transition hover:brightness-110"
             >
               Logout
